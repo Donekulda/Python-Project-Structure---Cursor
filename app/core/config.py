@@ -55,7 +55,9 @@ class Settings(BaseSettings):
 @lru_cache()
 def get_settings() -> Settings:
     """Get cached settings instance (singleton pattern)"""
+    print("Creating global settings instance")
     return Settings()
+    print("Global settings instance created")
 
 
 # Create a global settings instance
