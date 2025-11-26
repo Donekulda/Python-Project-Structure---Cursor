@@ -1,0 +1,132 @@
+---
+alwaysApply: true
+---
+
+# Python Project Structure - Base Rules
+
+This project follows a standard Python application structure. Follow these guidelines when adding or modifying code.
+
+## Project Structure
+
+```
+Python-Project-Structure---Cursor/
+├── app/                    # Main application package
+│   ├── __init__.py        # Package initialization
+│   ├── main.py            # Application entry point
+│   ├── core/              # Core functionality and configuration
+│   │   ├── __init__.py
+│   │   └── config.py      # Application settings and configuration
+│   ├── models/            # Data models and schemas
+│   │   └── __init__.py
+│   ├── services/          # Business logic and service layer
+│   │   └── __init__.py
+│   └── utils/             # Utility functions and helpers
+│       └── __init__.py
+├── tests/                 # Test files and test utilities
+├── docs/                  # Documentation files
+├── logs/                  # Application log files (auto-generated)
+├── requirements.txt       # Python dependencies
+├── run_app.sh            # Shell script to run the application
+├── DockerFile            # Docker configuration
+└── README.md             # Project documentation
+```
+
+## Directory Guidelines
+
+### `app/` - Main Application Package
+- **Purpose**: Contains all application code
+- **Structure**: Organized into sub-packages by functionality
+- **Entry Point**: `app/main.py` is the main entry point for the application
+- **Imports**: Use absolute imports from `app` package (e.g., `from app.core.config import settings`)
+
+### `app/core/` - Core Functionality
+- **Purpose**: Core application components, configuration, and shared functionality
+- **Contains**: 
+  - Configuration classes (e.g., `config.py` with Settings)
+  - Base classes and interfaces
+  - Application-wide constants
+- **Example**: `app/core/config.py` contains Pydantic-based settings with environment variable support
+
+### `app/models/` - Data Models
+- **Purpose**: Data models, schemas, and data structures
+- **Contains**: 
+  - Pydantic models
+  - Database models (if using ORM)
+  - Data transfer objects (DTOs)
+  - Type definitions
+
+### `app/services/` - Business Logic
+- **Purpose**: Business logic and service layer
+- **Contains**: 
+  - Service classes that implement business rules
+  - API service clients
+  - External service integrations
+  - Business process orchestration
+
+### `app/utils/` - Utility Functions
+- **Purpose**: Reusable utility functions and helpers
+- **Contains**: 
+  - Helper functions
+  - Common utilities (date formatting, string manipulation, etc.)
+  - Decorators
+  - Validators
+
+### `tests/` - Test Files
+- **Purpose**: All test files and test utilities
+- **Structure**: Mirror the `app/` structure for easy navigation
+- **Naming**: Test files should be prefixed with `test_` (e.g., `test_config.py`)
+
+### `docs/` - Documentation
+- **Purpose**: Project documentation, API documentation, guides
+- **Contains**: Markdown files, diagrams, architecture documentation
+
+### `logs/` - Log Files
+- **Purpose**: Application log files (auto-generated)
+- **Note**: This directory is created automatically by the application if it doesn't exist
+- **Git**: Should be in `.gitignore` (logs are typically not versioned)
+
+## Code Organization Rules
+
+1. **Package Structure**: Always use `__init__.py` files to make directories Python packages
+2. **Imports**: Use absolute imports from the `app` package root
+   - ✅ Good: `from app.core.config import settings`
+   - ❌ Bad: `from ..core.config import settings` (relative imports)
+3. **Configuration**: All configuration should be centralized in `app/core/config.py` using Pydantic Settings
+4. **Environment Variables**: Use `.env` files for environment-specific configuration
+5. **Dependencies**: Always add new dependencies to `requirements.txt` in the project root
+6. **Logging**: Use the logging configuration from `app/core/config.py` (LOG_DIR, LOG_LEVEL, etc.)
+
+## File Naming Conventions
+
+- **Python Files**: Use snake_case (e.g., `config.py`, `user_service.py`)
+- **Test Files**: Prefix with `test_` (e.g., `test_config.py`, `test_user_service.py`)
+- **Classes**: Use PascalCase (e.g., `Settings`, `UserService`)
+- **Functions/Variables**: Use snake_case (e.g., `get_settings()`, `user_id`)
+
+## Configuration Management
+
+- Settings are managed through `app/core/config.py` using Pydantic Settings
+- Settings support environment variables via `.env` files
+- Settings instance is cached using `@lru_cache()` for singleton pattern
+- Access settings via: `from app.core.config import settings`
+
+## Dependencies
+
+- Core dependencies are listed in `requirements.txt`
+- When adding new dependencies, always update `requirements.txt`
+- Use version pinning for production stability (e.g., `pydantic>=2.10.6`)
+
+## Running the Application
+
+- Use `run_app.sh` script to set up virtual environment and run the application
+- Main entry point: `app/main.py`
+- The application can also be run directly: `python -m app.main`
+
+## Best Practices
+
+1. **Separation of Concerns**: Keep business logic in `services/`, data models in `models/`, utilities in `utils/`
+2. **Configuration**: Never hardcode configuration values; use `app/core/config.py` and environment variables
+3. **Error Handling**: Implement proper error handling and logging throughout the application
+4. **Type Hints**: Use type hints for better code documentation and IDE support
+5. **Documentation**: Add docstrings to classes and functions
+6. **Testing**: Write tests for all new functionality in the `tests/` directory
